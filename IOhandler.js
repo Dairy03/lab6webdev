@@ -1,3 +1,7 @@
+const path = require("path");
+const PNG = require('pngjs').PNG;
+const fs = require("fs").promises;
+const { createReadStream, createWriteStream } = require("fs");
 /*
  * Project: Milestone 1
  * File Name: IOhandler.js
@@ -8,10 +12,10 @@
  *
  */
 
-const unzipper = require("unzipper"),
-  fs = require("fs"),
-  PNG = require("pngjs").PNG,
-  path = require("path");
+const unzipper = require("unzipper")
+  // fs = require("fs"),
+  // PNG = require("pngjs").PNG,
+  // path = require("path");
 
 /**
  * Description: decompress file from given pathIn, write to given pathOut
@@ -21,9 +25,14 @@ const unzipper = require("unzipper"),
  * @return {promise}
  * 
  */
-fs.createReadStream(pathIn)
-.pipe(unzipper.Extract({ path: pathOut}));
-const unzip = (pathIn, pathOut) => {};
+  const unzip = (pathIn, pathOut) => {
+    return new Promise((res, rej) => {
+      createReadStream(pathIn)
+      .pipe(unzipper.Extract({ path: pathOut}))
+      .promise()
+      .then( () => res('done'), e => rej('error', e));
+    })
+  };
 
 /**
  * Description: read all the png files from given directory and return Promise containing array of each png file path
@@ -31,7 +40,17 @@ const unzip = (pathIn, pathOut) => {};
  * @param {string} path
  * @return {promise}
  */
-const readDir = (dir) => {};
+const readDir = (filepath) => {
+  return new Promise((res, rej) => {
+    files = fs.readdir(filepath, (err, list) => {
+      if (err){
+          rej(err)
+      } else {
+        res(list)
+      }
+    });
+  })
+};
 
 /**
  * Description: Read in png file by given pathIn,
@@ -41,7 +60,9 @@ const readDir = (dir) => {};
  * @param {string} pathProcessed
  * @return {promise}
  */
-const grayScale = (pathIn, pathOut) => {};
+const grayScale = (pathIn, pathOut) => {
+
+};
 
 module.exports = {
   unzip,

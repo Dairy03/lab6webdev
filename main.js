@@ -8,14 +8,15 @@ const path = require("path");
  * Author:
  *
  */
-
+//const {unzip,readDir,grayScale} = require('./IOhandler.js');
 const IOhandler = require("./IOhandler");
 const zipFilePath = path.join(__dirname, "myfile.zip");
 const pathUnzipped = path.join(__dirname, "unzipped");
 const pathProcessed = path.join(__dirname, "grayscaled");
-const unzipper = require('unzipper');
-const fs = require("fs");
-const PNG = require('pngjs').PNG;
+// const unzipper = require('unzipper');
+// const fs = require("fs").promises;
+// const { createReadStream, createWriteStream } = require("fs");
+// const PNG = require('pngjs').PNG;
 
 //read zip file
 //unzip zip file.then() promises..
@@ -28,7 +29,7 @@ const PNG = require('pngjs').PNG;
 //     console.log(values)
 // }
 
-const transformStream = new PNG({});
+//const transformStream = new PNG({});
 // fs.createReadStream("./unzipped/in.png")
 //     .pipe(transformStream)
 //     .on("parsed", function (){
@@ -49,8 +50,17 @@ const transformStream = new PNG({});
 
 // const ts = zlib.createGunzip(); //returns transform 
 // step 1 unzip myfile.zip
-fs.createReadStream(zipFilePath)
-.pipe(unzipper.Extract({ path: "./unzipped"}));
+
+// createReadStream(zipFilePath)
+// .pipe(unzipper.Extract({ path: "./unzipped"}))
+// .promise()
+// .then( () => console.log('done'), e => console.log('error', e));
+IOhandler.unzip(zipFilePath, "./unzipped")
+    .then(() => IOhandler.readDir('./unzipped'))
+    .catch(err => console.log(err))
+
+
+
 
 //  to install the package for the unzipper thingy, use npm install pngjs in terminal
 //npm install to just get everything
